@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public float speed = 0;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
+    public AudioClip cheesePickupSound; 
+
 
     void Start()
     {
@@ -40,17 +42,32 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("PickUp"))
         {
-    
+            ParticleSystem sparkle = other.GetComponentInChildren<ParticleSystem>();
+            if (sparkle != null)
+            {
+                sparkle.transform.parent = null; 
+                sparkle.Play();
+                Destroy(sparkle.gameObject, 2f); 
+            }
+
+            AudioSource audioSource = GetComponent<AudioSource>();
+            if (audioSource != null && cheesePickupSound != null)
+            {
+                audioSource.PlayOneShot(cheesePickupSound);
+            }
+
             other.gameObject.SetActive(false);
             count = count + 1;
             SetCountText();
+            FindObjectOfType<HealthTimer>().AddHealth(30f);
+
         }
     }
 
     void SetCountText()
     {
      
-        countText.text = "Count: " + count.ToString();
+        countText.text = "Cheese Count: " + count.ToString();
         if (count >= 8)
         {
             winTextObject.SetActive(true);
