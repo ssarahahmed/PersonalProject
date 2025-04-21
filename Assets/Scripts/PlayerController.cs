@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
     private float movementY;
     public float speed = 0;
     public TextMeshProUGUI countText;
-    public GameObject winTextObject;
     public AudioClip cheesePickupSound; 
 
 
@@ -20,7 +19,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         count = 0;
         SetCountText();
-        winTextObject.SetActive(false);
     }
 
     void OnMove(InputValue movementValue)
@@ -70,7 +68,6 @@ public class PlayerController : MonoBehaviour
         countText.text = "Cheese Count: " + count.ToString();
         if (count >= 8)
         {
-            winTextObject.SetActive(true);
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
         }
     }
@@ -81,8 +78,6 @@ public class PlayerController : MonoBehaviour
         {
            
             Destroy(gameObject);
-            winTextObject.gameObject.SetActive(true);
-            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
 
         }
 
