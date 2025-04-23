@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,33 +9,76 @@ public class PlayerController : MonoBehaviour
     private int count;
     private float movementX;
     private float movementY;
-    public float speed = 0;
+    public float speed = 10f;
+    public float jumpForce = 5f;
+    private bool isGrounded;
     public TextMeshProUGUI countText;
-    public AudioClip cheesePickupSound; 
+    public AudioClip cheesePickupSound;
+    public LayerMask groundLayer;
+    public Transform respawnPoint;
 
+    private InputActions controls; 
 
+    void Awake()
+    {
+        controls = new InputActions(); 
+    }
+   
+    void OnEnable()
+    {
+        controls.Enable(); 
+    }
+
+    void OnDisable()
+    {
+        controls.Disable(); 
+    }
+   
     void Start()
     {
-       
         rb = GetComponent<Rigidbody>();
         count = 0;
         SetCountText();
     }
 
-    void OnMove(InputValue movementValue)
+    void Update()
     {
-        Vector2 movementVector = movementValue.Get<Vector2>();
+        Vector2 movementVector = controls.Player.Move.ReadValue<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
+
+        if (controls.Player.Jump.triggered && isGrounded)
+        {
+            Jump();
+        }
+
+        CheckGrounded();
+    }
+
+    void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        isGrounded = false;
+    }
+
+    private void CheckGrounded()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f, groundLayer))
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 
     private void FixedUpdate()
-    { 
+    {
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
-
         rb.AddForce(movement * speed);
     }
-
 
     void OnTriggerEnter(Collider other)
     {
@@ -43,9 +87,9 @@ public class PlayerController : MonoBehaviour
             ParticleSystem sparkle = other.GetComponentInChildren<ParticleSystem>();
             if (sparkle != null)
             {
-                sparkle.transform.parent = null; 
+                sparkle.transform.parent = null;
                 sparkle.Play();
-                Destroy(sparkle.gameObject, 2f); 
+                Destroy(sparkle.gameObject, 2f);
             }
 
             AudioSource audioSource = GetComponent<AudioSource>();
@@ -58,30 +102,51 @@ public class PlayerController : MonoBehaviour
             count = count + 1;
             SetCountText();
             FindObjectOfType<HealthTimer>().AddHealth(30f);
-
         }
+
+        if (other.CompareTag("Respawn"))
+        {
+            Respawn();
+        }
+    }
+
+    void Respawn()
+    {
+        GetComponent<Rigidbody>().linearVelocity = Vector3.zero; 
+        transform.position = respawnPoint.position;         
     }
 
     void SetCountText()
     {
-     
-      /*  countText.text = "Cheese Count: " + count.ToString();
-        if (count >= 8)
-        {
-            Destroy(GameObject.FindGameObjectWithTag("Enemy"));
-        }*/
+        countText.text = "Cheese Count: " + count.ToString();
+    }
+
+    public int GetCheeseCount()
+    {
+        return count;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-     /*   if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Ground"))
         {
-           
-            Destroy(gameObject);
-
+            isGrounded = true;
         }
-     */
     }
 
+    public void CheckHealth(float currentHealth)
+    {
+        if (currentHealth <= 0f)
+        {
+            SavePlayerData(); // Save cheese count
+            SceneManager.LoadScene("GameOver");
+
+        }
+    }
+        public void SavePlayerData()
+    {
+        PlayerPrefs.SetInt("CheeseCount", count);
+        PlayerPrefs.Save();
+    }
 
 }
