@@ -65,22 +65,22 @@ public class PlayerController : MonoBehaviour
     void SetCountText()
     {
      
-        countText.text = "Cheese Count: " + count.ToString();
+      /*  countText.text = "Cheese Count: " + count.ToString();
         if (count >= 8)
         {
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
-        }
+        }*/
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+     /*   if (collision.gameObject.CompareTag("Enemy"))
         {
            
             Destroy(gameObject);
 
         }
-
+     */
     }
 
 

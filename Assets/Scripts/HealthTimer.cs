@@ -8,6 +8,7 @@ public class HealthTimer : MonoBehaviour
     public float drainRate = 0.2f; 
     private float currentHealth;
     private float timer;
+    private bool gamestart = false;
 
     void Start()
     {
@@ -19,6 +20,8 @@ public class HealthTimer : MonoBehaviour
 
     void Update()
     {
+        if (!gamestart) return;
+
         timer += Time.deltaTime;
         currentHealth -= drainRate * Time.deltaTime;
 
@@ -28,9 +31,14 @@ public class HealthTimer : MonoBehaviour
 
         if (currentHealth <= 0f)
         {
-            Debug.Log("Game Over! 🧀");
+            Debug.Log("Game Over!");
             
         }
+    }
+
+    public void StartTimer()
+    {
+        gamestart = true;
     }
 
     public void AddHealth(float amount)
