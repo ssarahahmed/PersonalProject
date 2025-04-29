@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HealthTimer : MonoBehaviour
 {
@@ -31,9 +32,10 @@ public class HealthTimer : MonoBehaviour
 
         if (currentHealth <= 0f)
         {
-            Debug.Log("Game Over!");
-            
+            currentHealth = 0f; 
+            FindObjectOfType<PlayerController>().CheckHealth(currentHealth);
         }
+
     }
 
     public void StartTimer()
@@ -46,5 +48,16 @@ public class HealthTimer : MonoBehaviour
         currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
         healthBar.value = currentHealth;
+    }
+
+    public void ReduceHealth()
+    {
+        currentHealth -= 10f;
+
+        if (currentHealth <= 0f)
+        {
+            currentHealth = 0f;
+            FindObjectOfType<PlayerController>().CheckHealth(currentHealth);
+        }
     }
 }

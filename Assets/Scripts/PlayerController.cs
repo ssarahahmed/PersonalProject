@@ -43,6 +43,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.GameStarted) return;
+
         Vector2 movementVector = controls.Player.Move.ReadValue<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
@@ -119,6 +121,12 @@ public class PlayerController : MonoBehaviour
     void SetCountText()
     {
         countText.text = "Cheese Count: " + count.ToString();
+
+        if (count >= 5)
+        {
+            SavePlayerData(); // Save the cheese count before changing scenes
+            SceneManager.LoadScene("GameOver");
+        }
     }
 
     public int GetCheeseCount()

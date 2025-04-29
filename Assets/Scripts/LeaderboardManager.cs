@@ -19,13 +19,13 @@ public class LeaderboardManager : MonoBehaviour
 
     void Start()
     {
-        leaderboard.Add(new LeaderboardEntry { playerName = "Player1", cheeseCount = 150 });
+      /*  leaderboard.Add(new LeaderboardEntry { playerName = "Player1", cheeseCount = 150 });
         leaderboard.Add(new LeaderboardEntry { playerName = "Player2", cheeseCount = 120 });
         leaderboard.Add(new LeaderboardEntry { playerName = "Player3", cheeseCount = 100 });
 
         leaderboard.Sort((x, y) => y.cheeseCount.CompareTo(x.cheeseCount));
 
-        PopulateLeaderboard();
+        PopulateLeaderboard(); */
     }
 
     void PopulateLeaderboard()

@@ -19,7 +19,7 @@ public class GameOverManager : MonoBehaviour
 
         if (finalScoreText != null)
         {
-            finalScoreText.text = "Cheese Count: " + cheeseCount;
+            finalScoreText.text = playerName + " collected " + cheeseCount + " piece(s) of cheese!";
         }
 
         if (leaderboardManager != null)

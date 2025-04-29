@@ -11,11 +11,12 @@ public class InstructionManager : MonoBehaviour
 
     private string[] instructions = new string[]
     {
-        "You are a ball come to life, and this is your last chance to escape!",
+        "You are a ball come to life, and this is your last chance to escape the circus!",
         "Use the arrow keys to move.",
         "Use the spacebar to jump.",
-        "Collect all the cheese to win and escape!",
+        "Collect 5 pieces of cheese to win and escape!",
         "Avoid the enemies and stay full or you’ll lose health.",
+        "But be careful! Some platforms are false, so try to remember the way!",
         "Good luck! Click Next to begin."
     };
 
